@@ -34,9 +34,14 @@ def video():
 
 		_, frame = cap.read()
 
-		resized = cv2.resize(frame, (WIDTH, HEIGHT))
-		resized = resized.astype(np.float32)
-		resized = np.rollaxis(resized, 2, 0)		
+		resized = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+		resized = cv2.resize(resized, (HEIGHT, WIDTH))
+		resized = (2.0/255.0) * resized - 1.0
+		resized = resized.transpose((2,0,1))
+
+#		resized = cv2.resize(frame, (WIDTH, HEIGHT))
+#		resized = resized.astype(np.float32)
+#		resized = np.rollaxis(resized, 2, 0)		
 
 		h_input, d_input, h_output, d_output, stream = inf.allocate_buffers(engine, 1, trt.float32)
 
